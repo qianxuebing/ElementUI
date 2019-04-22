@@ -2,6 +2,11 @@
   <div class="wrapper">
     <common-header></common-header>
     <common-sidebar></common-sidebar>
+    <div class="content">
+      <transition name="move" mode="out-in">
+        <router-view></router-view>
+      </transition>
+    </div>
   </div>
 </template>
 
