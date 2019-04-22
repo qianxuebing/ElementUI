@@ -117,6 +117,27 @@
       </div>
     </div>
 
+    <!--编辑信息-->
+    <el-dialog
+      title="编辑信息"
+      :visible.sync="dialogFromVisible">
+      <el-form :model="form">
+        <el-form-item label="姓名">
+          <el-input
+            v-model="form.name"
+            auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input
+            v-model="form.address"
+            auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button>取消</el-button>
+        <el-button type="primary">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -156,19 +177,16 @@ export default {
       tableData: [],
       currentPage: 1,
       total: 0,
-      pageSize: 10
+      pageSize: 10,
+      form: {
+        name: '',
+        address: '',
+        id: ''
+      },
+      dialogFromVisible: true
     }
   },
   methods: {
-    loadDate () {
-      this.loading2 = true
-      var params = {
-        page: this.currentPage,
-        pageSize: this.pageSize,
-        name: this.formInline.name,
-        address: this.formInline.address
-      }
-    },
     onSubmit () {
       console.log('submit')
     },
