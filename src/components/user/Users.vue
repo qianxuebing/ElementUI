@@ -54,7 +54,8 @@
       :data="tableData"
       v-loading="loading2"
       element-loaing-text="拼命加载中"
-      style="width: 100%">
+      style="width: 100%"
+      @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
         width="55">
@@ -77,20 +78,22 @@
         fixed="right"
         label="操作"
         width="140">
-        <template scope="scope">
+        <template slot-scope="scope">
+          <!--<el-button-->
+            <!--type="text"-->
+            <!--size="small">-->
+            <!--查看-->
+          <!--</el-button>-->
           <el-button
             type="text"
-            size="small">
-            查看
-          </el-button>
-          <el-button
-            type="text"
-            size="small">
+            size="small"
+            @click="showEditDialog(scope.$index)">
             编辑
           </el-button>
           <el-button
             type="text"
-            size="small">
+            size="small"
+            @click="removeData(scope.$index)">
             删除
           </el-button>
         </template>
@@ -101,7 +104,8 @@
     <div class="block">
       <div class="r_btn">
         <el-button
-          type="primary">
+          type="primary"
+          @click="batchRemove">
           批量删除
         </el-button>
       </div>
@@ -134,8 +138,13 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button>取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button
+          @click="dialogFromVisible = false">
+          取消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="update">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -151,7 +160,11 @@ export default {
         address: '',
         id: ''
       },
-      addressList: ['上海市普陀区金沙江路 1518 弄', '上海市普陀区金沙江路 1519 弄', '上海市普陀区金沙江路 1517 弄'],
+      addressList: [
+        '上海市普陀区金沙江路 1518 弄',
+        '上海市普陀区金沙江路 1519 弄',
+        '上海市普陀区金沙江路 1517 弄'
+      ],
       pickerOptions0: {
         disabledDate (time) {
           return time.getTime() < Date.now() - 8.64e7
@@ -174,7 +187,21 @@ export default {
       }],
       loading2: false,
       selectedOptions: [],
-      tableData: [],
+      tableData: [
+        {
+          name: '张三',
+          address: '上海市普陀区金沙江路 1518 弄',
+          date: '2016-05-02'
+        }, {
+          name: '李四',
+          address: '上海市普陀区金沙江路 1516 弄',
+          date: '2016-05-06'
+        }, {
+          name: '王五',
+          address: '上海市普陀区金沙江路 1512 弄',
+          date: '2016-05-08'
+        }
+      ],
       currentPage: 1,
       total: 0,
       pageSize: 10,
@@ -183,7 +210,8 @@ export default {
         address: '',
         id: ''
       },
-      dialogFromVisible: true
+      dialogFromVisible: false,
+      multipleSelection: []
     }
   },
   methods: {
@@ -195,6 +223,54 @@ export default {
     },
     handleCurrentChange (val) {
       this.currentPage = val
+    },
+    // 打开编辑窗口
+    showEditDialog (row) {
+      var data = this.tableData[row]
+      this.form.id = data.id
+      this.form.name = data.name
+      this.form.address = data.address
+      this.dialogFromVisible = true
+    },
+    // 删除所在行
+    removeData (row) {
+      var data = this.tableData[row]
+      this.$confirm(`确定要删除${data.name}?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // 更新数据
+    update () {
+      if (this.form.name === '') {
+        this.$message.error('姓名不能为空')
+        return
+      }
+      this.$message({
+        message: '修改成功',
+        type: 'success'
+      })
+      this.dialogFromVisible = false
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    // 批量删除
+    batchRemove () {
+      this.multipleSelection.forEach(row => {
+        console.log(row)
+      })
     }
   }
 }

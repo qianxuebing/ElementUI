@@ -54,6 +54,16 @@ export default {
               title: '用户列表'
             }
           ]
+        }, {
+          icon: 'el-icon-message',
+          index: '3',
+          title: '方案管理',
+          subs: [
+            {
+              index: '/UserInfo',
+              title: '最新贺报'
+            }
+          ]
         }
       ]
     }
