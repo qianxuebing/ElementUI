@@ -22,12 +22,18 @@ export default {
   name: 'UserInfo',
   data () {
     return {
-      currentDate: new Date().toDateString()
+      // currentDate: new Date().toDateString()
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .el-card{
+    transition: .15s box-shadow, .15s margin-top;
+  }
+  .el-card:hover{
+    box-shadow: 0 0 20px rgba(0,0,0, .35);
+    margin-top: -5px;
+  }
 </style>
